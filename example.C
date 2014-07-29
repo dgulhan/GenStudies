@@ -3,27 +3,13 @@
 #include <algorithm>
 #include "TCanvas.h"
 #include "TError.h"
-#include "TPad.h"
-#include "TString.h"
-#include "TRandom1.h"
-#include "TLorentzVector.h"
-#include "TH1F.h"
-#include "TF1.h"
- 
+
 #include "TFile.h"
 #include "TTree.h"
 #include "TH1D.h"
-#include "TProfile.h"
-#include "TProfile2D.h"
 #include "TH2D.h"
 #include "TCanvas.h"
-#include "TLegend.h"
-#include "TLatex.h"
-#include "TComplex.h"
-#include "TString.h"  
-#include "TCut.h"
 #include "TNtuple.h"
-#include "TLine.h" 
 #include "ntupler/genpart.C"
 
 
@@ -40,15 +26,13 @@ void example(){
 
  std:string jetVars="cent:pt1:eta1:phi1:pt2:eta2:phi2:pt3:eta3:phi3:dphi:ptratio";
 
- 
  TNtuple *nt_jet = new TNtuple("nt_jet","",jetVars.data());
 
- for(int ipthat=0;ipthat<1;ipthat++){ 
-  genjet *fjet = new genjet(Form("%s%s.root",directory.Data(),infname.Data()));
-  genpart *fgen = new genpart(Form("%s%s.root",directory.Data(),infname.Data()));
+ genjet *fjet = new genjet(Form("%s%s.root",directory.Data(),infname.Data()));
+ genpart *fgen = new genpart(Form("%s%s.root",directory.Data(),infname.Data()));
  
-  int nentries = fgen->GetEntriesFast();
-  for(int jentry=0;jentry<nentries;jentry++){
+ int nentries = fgen->GetEntriesFast();
+ for(int jentry=0;jentry<nentries;jentry++){
    if((jentry%1000)==0) std::cout<<jentry<<"/"<<nentries<<std::endl;
    fjet->GetEntry(jentry);
    fgen->GetEntry(jentry);
@@ -100,13 +84,10 @@ void example(){
    }
   }
 
-  if(pt1<100) continue;
-
   for(int itrk=0;itrk<fgen->mult;itrk++){
    
    float eta=fgen->eta[itrk]; 
    float pt=fgen->pt[itrk];
-   float matchedpt=pt;
 
    // if(fgen->chg[itrk]==0)continue;   //to get only charged particles
    float phi=fgen->phi[itrk];
@@ -115,7 +96,6 @@ void example(){
    
    float entry[]={pt,eta,phi,pt1,pt2,dphi,pdg};
    if(doSaveTrackInfo) nt_gen->Fill(entry);
- 
 
   }
    
@@ -123,8 +103,8 @@ void example(){
   jets.clear();
   float jtentry[]={cent,pt1,eta1,phi1,pt2,eta2,phi2,pt3,eta3,phi3,dphi,ptratio};
   nt_jet->Fill(jtentry);
-  }
- } 
+ }
+ 
 
  
  outf->cd();
